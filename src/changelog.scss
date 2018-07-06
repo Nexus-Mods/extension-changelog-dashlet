@@ -1,0 +1,9 @@
+.dashlet-changelog {
+  display: flex;
+  flex-direction: column;
+  .changelog-text {
+    flex: 1 1 0;
+    overflow: auto;
+    white-space: pre;
+  }
+}
