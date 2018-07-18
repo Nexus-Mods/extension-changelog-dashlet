@@ -1,18 +1,8 @@
-import * as Promise from 'bluebird';
-import { IncomingMessage } from 'http';
-import { get } from 'https';
-import { IIssue } from 'nexus-api';
 import * as React from 'react';
-import { Button, Carousel, Pager } from 'react-bootstrap';
-import * as ReactDOM from 'react-dom';
+import { Pager } from 'react-bootstrap';
 import { translate } from 'react-i18next';
 import { connect } from 'react-redux';
-import * as Redux from 'redux';
-import * as url from 'url';
-import { ComponentEx, Dashlet, log, Spinner, tooltip, types } from 'vortex-api';
-import * as va from 'vortex-api';
-
-const { EmptyPlaceholder } = va as any;
+import { ComponentEx, Dashlet } from 'vortex-api';
 
 interface IConnectedProps {
   changelogs: Array<{ version: string, text: string, prerelease: boolean }>;
