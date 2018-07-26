@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 import * as path from 'path';
 import * as semver from 'semver';
 import * as url from 'url';
-import { types, util } from 'vortex-api';
+import { log, types } from 'vortex-api';
 import { setChangelogs } from './actions';
 
 function updateReleases(store: Redux.Store<any>): Promise<void> {
@@ -57,7 +57,10 @@ function main(context: types.IExtensionContext) {
   context.once(() => {
     context.api.setStylesheet('changelog',
       path.join(__dirname, 'changelog.scss'));
-    updateReleases(context.api.store);
+    updateReleases(context.api.store)
+      .catch(err => {
+        log('warn', 'failed to retrieve list of releases', err.message);
+      });
   });
 
   return true;
