@@ -1,7 +1,9 @@
+import { remote } from 'electron';
 import * as React from 'react';
 import { Pager } from 'react-bootstrap';
 import { translate } from 'react-i18next';
 import { connect } from 'react-redux';
+import * as semver from 'semver';
 import { ComponentEx, Dashlet } from 'vortex-api';
 
 interface IConnectedProps {
@@ -21,8 +23,9 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
   constructor(props: IProps) {
     super(props);
 
+    const appVersion = remote.app.getVersion();
     this.initState({
-      current: 0,
+      current: props.changelogs.findIndex(changelog => semver.gte(changelog.version, appVersion)),
     });
   }
 
