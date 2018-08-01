@@ -20,13 +20,26 @@ interface IIssueListState {
 }
 
 class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
+  private mAppVersion: string;
   constructor(props: IProps) {
     super(props);
 
-    const appVersion = remote.app.getVersion();
+    this.mAppVersion = remote.app.getVersion();
     this.initState({
-      current: props.changelogs.findIndex(changelog => semver.gte(changelog.version, appVersion)),
+      current: 0,
     });
+  }
+
+  public componentWillMount() {
+    this.nextState.current =
+      this.props.changelogs.findIndex(changelog => semver.gte(changelog.version, this.mAppVersion));
+  }
+
+  public componentWillReceiveProps(nextProps: IProps) {
+    if (this.props.changelogs !== nextProps.changelogs) {
+      const appVersion = remote.app.getVersion();
+      this.nextState.current = nextProps.changelogs.findIndex(changelog => semver.gte(changelog.version, appVersion));
+    }
   }
 
   public render(): JSX.Element {
@@ -44,6 +57,9 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
     const { current } = this.state;
 
     const changelog = changelogs[current];
+    if (changelog === undefined) {
+      return null;
+    }
 
     return [
        (
