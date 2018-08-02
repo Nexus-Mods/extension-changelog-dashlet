@@ -26,18 +26,23 @@ function updateReleases(store: Redux.Store<any>): Promise<void> {
       res
         .on('data', data => output += data)
         .on('end', () => {
-          const parsed: IGithubRelease[] = JSON.parse(output);
-          // dropping releases before 0.12.7 because they weren't public and didn't have
-          // proper changelogs
-          const current = parsed
-            .filter(rel => semver.valid(rel.name) && semver.gte(rel.name, '0.12.7'))
-            .sort((lhs, rhs) => semver.compare(lhs.name, rhs.name));
-          store.dispatch(setChangelogs(
-            current.map(rel => ({
-              version: rel.name,
-              text: rel.body,
-              prerelease: rel.prerelease,
-             }))));
+          try {
+            const parsed: IGithubRelease[] = JSON.parse(output);
+            // dropping releases before 0.12.7 because they weren't public and didn't have
+            // proper changelogs
+            const current = parsed
+              .filter(rel => semver.valid(rel.name) && semver.gte(rel.name, '0.12.7'))
+              .sort((lhs, rhs) => semver.compare(lhs.name, rhs.name));
+            store.dispatch(setChangelogs(
+              current.map(rel => ({
+                version: rel.name,
+                text: rel.body,
+                prerelease: rel.prerelease,
+              }))));
+            resolve();
+          } catch (err) {
+            reject(err);
+          }
         });
     })
     .on('error', err => {
