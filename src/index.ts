@@ -22,12 +22,25 @@ function updateReleases(store: Redux.Store<any>): Promise<void> {
       },
     }, res => {
       res.setEncoding('utf-8');
+      const callsRemaining = parseInt(res.headers['x-ratelimit-remaining'] as string, 10);
+      if ((res.statusCode === 403) && (callsRemaining === 0)) {
+        const resetDate = parseInt(res.headers['x-ratelimit-reset'] as string, 10) * 1000;
+        log('info', 'GitHub rate limit exceeded',
+            { reset_at: (new Date(resetDate)).toString() });
+        return;
+      } else {
+        log('debug', 'remaining API calls', { count: callsRemaining });
+      }
       let output = '';
       res
         .on('data', data => output += data)
         .on('end', () => {
           try {
             const parsed: IGithubRelease[] = JSON.parse(output);
+            if (!Array.isArray(parsed)) {
+              log('error', 'expected array of github releases', { got: parsed });
+              return;
+            }
             // dropping releases before 0.12.7 because they weren't public and didn't have
             // proper changelogs
             const current = parsed
