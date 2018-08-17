@@ -1,16 +1,16 @@
+import { setChangelogs } from './actions';
 import ChangelogDashlet from './ChangelogDashlet';
 import sessionReducer from './reducers';
 import { IGithubRelease } from './types';
 
 import * as Promise from 'bluebird';
-import { remote } from 'electron';
 import * as https from 'https';
 import * as _ from 'lodash';
 import * as path from 'path';
+import * as Redux from 'redux';
 import * as semver from 'semver';
 import * as url from 'url';
 import { log, types } from 'vortex-api';
-import { setChangelogs } from './actions';
 
 function updateReleases(store: Redux.Store<any>): Promise<void> {
   return new Promise<void>((resolve, reject) => {
