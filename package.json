@@ -9,7 +9,7 @@
     "copy_scss": "copyfiles -f src/changelog.scss dist",
     "build": "npm run webpack && npm run copy_scss && extractInfo"
   },
-  "author": "Black Tree Gaming Ltd",
+  "author": "Black Tree Gaming Ltd.",
   "license": "GPL-3.0",
   "babel": {
     "presets": [
