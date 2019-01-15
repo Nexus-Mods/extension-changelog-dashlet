@@ -43,10 +43,11 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
   }
 
   public render(): JSX.Element {
-    const { t } = this.props;
+    const { t, changelogs } = this.props;
+    const { current } = this.state;
     return (
       <Dashlet className='dashlet-changelog' title={t('Changelog')}>
-        {this.renderContent()}
+        {(current < changelogs.length) ? this.renderContent() : null}
       </Dashlet>
     );
   }
