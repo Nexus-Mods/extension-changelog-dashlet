@@ -10,7 +10,7 @@ import * as path from 'path';
 import * as Redux from 'redux';
 import * as semver from 'semver';
 import * as url from 'url';
-import { log, types } from 'vortex-api';
+import { log, types, util } from 'vortex-api';
 
 function updateReleases(store: Redux.Store<any>): Promise<void> {
   return new Promise<void>((resolve, reject) => {
@@ -46,12 +46,20 @@ function updateReleases(store: Redux.Store<any>): Promise<void> {
             const current = parsed
               .filter(rel => semver.valid(rel.name) && semver.gte(rel.name, '0.12.7'))
               .sort((lhs, rhs) => semver.compare(lhs.name, rhs.name));
-            store.dispatch(setChangelogs(
-              current.map(rel => ({
+            
+            const state: types.IState = store.getState();
+            const persistentLogs = util.getSafe(state, ['persistent', 'changelogs', 'changelogs'], []);
+
+            if (persistentLogs.length !== current.length) {
+              const changeLogs = current.map(rel => ({
                 version: rel.name,
                 text: rel.body,
                 prerelease: rel.prerelease,
-              }))));
+              }));
+
+              store.dispatch(setChangelogs(changeLogs));
+            }
+
             resolve();
           } catch (err) {
             reject(err);
@@ -70,7 +78,10 @@ function main(context: types.IExtensionContext) {
     (state: types.IState) => true,
   () => ({}), { closable: true });
 
-  context.registerReducer(['session', 'changelogs'], sessionReducer);
+  // We store changelogs persistently, so even on a rare edge case
+  //  where the user has exceeded his GitHub rate limit (shouldn't be possible)
+  //  we still have data to display.
+  context.registerReducer(['persistent', 'changelogs'], sessionReducer);
 
   context.once(() => {
     context.api.setStylesheet('changelog',

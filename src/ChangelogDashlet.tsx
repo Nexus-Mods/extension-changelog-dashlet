@@ -43,11 +43,10 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
   }
 
   public render(): JSX.Element {
-    const { t, changelogs } = this.props;
-    const { current } = this.state;
+    const { t } = this.props;
     return (
       <Dashlet className='dashlet-changelog' title={t('Changelog')}>
-        {(current < changelogs.length) ? this.renderContent() : null}
+        {this.renderContent()}
       </Dashlet>
     );
   }
@@ -93,7 +92,7 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
 
 function mapStateToProps(state: any): IConnectedProps {
   return {
-    changelogs: state.session.changelogs.changelogs,
+    changelogs: state.persistent.changelogs.changelogs,
   };
 }
 
