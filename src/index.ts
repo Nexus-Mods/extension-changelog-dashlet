@@ -46,11 +46,15 @@ function updateReleases(store: Redux.Store<any>): Promise<void> {
             const current = parsed
               .filter(rel => semver.valid(rel.name) && semver.gte(rel.name, '0.12.7'))
               .sort((lhs, rhs) => semver.compare(lhs.name, rhs.name));
-            
-            const state: types.IState = store.getState();
-            const persistentLogs = util.getSafe(state, ['persistent', 'changelogs', 'changelogs'], []);
 
-            if (persistentLogs.length !== current.length) {
+            const state: types.IState = store.getState();
+            const persistentLogs =
+              util.getSafe(state, ['persistent', 'changelogs', 'changelogs'], []);
+
+            const len = current.length;
+
+            if ((persistentLogs.length !== len)
+                || (persistentLogs[len - 1].name !== current[len - 1].name)) {
               const changeLogs = current.map(rel => ({
                 version: rel.name,
                 text: rel.body,

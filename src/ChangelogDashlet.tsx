@@ -10,10 +10,7 @@ interface IConnectedProps {
   changelogs: Array<{ version: string, text: string, prerelease: boolean }>;
 }
 
-interface IActionProps {
-}
-
-type IProps = IConnectedProps & IActionProps;
+type IProps = IConnectedProps;
 
 interface IIssueListState {
   current: number;
@@ -31,14 +28,18 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
   }
 
   public componentWillMount() {
-    this.nextState.current =
-      this.props.changelogs.findIndex(changelog => semver.gte(changelog.version, this.mAppVersion));
+    this.nextState.current = Math.max(
+      this.props.changelogs.findIndex(changelog => semver.gte(changelog.version, this.mAppVersion)),
+      0);
   }
 
   public componentWillReceiveProps(nextProps: IProps) {
     if (this.props.changelogs !== nextProps.changelogs) {
       const appVersion = remote.app.getVersion();
-      this.nextState.current = nextProps.changelogs.findIndex(changelog => semver.gte(changelog.version, appVersion));
+
+      this.nextState.current = Math.max(
+        nextProps.changelogs.findIndex(changelog => semver.gte(changelog.version, appVersion)),
+        0);
     }
   }
 
@@ -62,7 +63,7 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
     }
 
     return [
-       (
+      (
         <Pager key={0}>
           <Pager.Item previous disabled={current === 0} onClick={this.prev}>
             {t('Previous')}
@@ -71,13 +72,13 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
           <Pager.Item next disabled={current === changelogs.length - 1} onClick={this.next}>
             {t('Next')}
           </Pager.Item>
-       </Pager>
-       ),
+        </Pager>
+      ),
       (
         <div className='changelog-text' key={1}>
           {changelog.text}
         </div>
-       ),
+      ),
     ];
   }
 
@@ -97,12 +98,7 @@ function mapStateToProps(state: any): IConnectedProps {
   };
 }
 
-function mapDispatchToProps(dispatch: any): IActionProps {
-  return {
-  };
-}
-
 export default
-  connect(mapStateToProps, mapDispatchToProps)(
+  connect(mapStateToProps)(
     translate(['changelog-dashlet', 'common'], { wait: true })(
       ChangelogDashlet));
