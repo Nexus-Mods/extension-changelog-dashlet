@@ -35,10 +35,9 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
 
   public componentWillReceiveProps(nextProps: IProps) {
     if (this.props.changelogs !== nextProps.changelogs) {
-      const appVersion = remote.app.getVersion();
-
       this.nextState.current = Math.max(
-        nextProps.changelogs.findIndex(changelog => semver.gte(changelog.version, appVersion)),
+        nextProps.changelogs.findIndex(changelog =>
+          semver.gte(changelog.version, this.mAppVersion)),
         0);
     }
   }
