@@ -1,7 +1,7 @@
 import { remote } from 'electron';
 import * as React from 'react';
 import { Pager } from 'react-bootstrap';
-import { translate } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as semver from 'semver';
 import { ComponentEx, Dashlet } from 'vortex-api';
@@ -99,5 +99,5 @@ function mapStateToProps(state: any): IConnectedProps {
 
 export default
   connect(mapStateToProps)(
-    translate(['changelog-dashlet', 'common'], { wait: true })(
-      ChangelogDashlet));
+    withTranslation(['changelog-dashlet', 'common'])(
+      ChangelogDashlet as any)) as React.ComponentClass<{}>;
