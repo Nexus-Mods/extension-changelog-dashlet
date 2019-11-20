@@ -2,7 +2,7 @@ import { setChangelogs } from './actions';
 import ChangelogDashlet from './ChangelogDashlet';
 import sessionReducer from './reducers';
 
-import * as Promise from 'bluebird';
+import Promise from 'bluebird';
 import * as _ from 'lodash';
 import * as path from 'path';
 import * as Redux from 'redux';
