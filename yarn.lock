@@ -20,21 +20,31 @@
   version "15.5.8"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.5.8.tgz#8ae4e0ea205fe95c3901a5a1df7f66495e3a56ce"
 
-"@types/react-bootstrap@^0.32.10":
-  version "0.32.15"
-  resolved "https://registry.yarnpkg.com/@types/react-bootstrap/-/react-bootstrap-0.32.15.tgz#66363d67fb23a610c378b0737b18cbfbc1b232f2"
+"@types/react-bootstrap@^0.32.20":
+  version "0.32.20"
+  resolved "https://registry.yarnpkg.com/@types/react-bootstrap/-/react-bootstrap-0.32.20.tgz#8d90e625a1b2d92d169de27e40b3d20057efa1ae"
+  integrity sha512-lc7bUHGMfVkbH9B7EKPD/9AYtgtFYP5go5D3tqIUN4O0znPX1UwBY4wUeicJPONaMpYtmVUGSdbDDqK9lXUCFQ==
   dependencies:
     "@types/react" "*"
 
-"@types/react-dom@^16.0.6":
-  version "16.0.11"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.0.11.tgz#bd10ccb0d9260343f4b9a49d4f7a8330a5c1f081"
+"@types/react-dom@^16.9.4":
+  version "16.9.4"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.9.4.tgz#0b58df09a60961dcb77f62d4f1832427513420df"
+  integrity sha512-fya9xteU/n90tda0s+FtN5Ym4tbgxpq/hb/Af24dvs6uYnYn+fspaxw5USlw0R8apDNwxsqumdRoCoKitckQqw==
   dependencies:
     "@types/react" "*"
 
 "@types/react@*":
   version "16.7.18"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.7.18.tgz#f4ce0d539a893dd61e36cd11ae3a5e54f5a48337"
+  dependencies:
+    "@types/prop-types" "*"
+    csstype "^2.2.0"
+
+"@types/react@^16.9.17":
+  version "16.9.17"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.17.tgz#58f0cc0e9ec2425d1441dd7b623421a867aa253e"
+  integrity sha512-UP27In4fp4sWF5JgyV6pwVPAQM83Fj76JOcg02X5BZcpSu5Wx+fP9RMqc2v0ssBoQIFvD5JdKY41gjJJKmw6Bg==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -2715,9 +2725,9 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
-vortex-api@Nexus-Mods/vortex-api:
-  version "0.17.4-r1"
-  resolved "https://codeload.github.com/Nexus-Mods/vortex-api/tar.gz/5c73ac0b2ad714afc8d4f34afc9c74680471e9aa"
+vortex-api@Nexus-Mods/Vortex-api#electron7:
+  version "1.1.1-electron7.2"
+  resolved "https://codeload.github.com/Nexus-Mods/Vortex-api/tar.gz/fb7bda1f9f63cc0d0dd251bfe65dcb11e4449762"
 
 watchpack@^1.5.0:
   version "1.6.0"

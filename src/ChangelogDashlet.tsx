@@ -100,4 +100,4 @@ function mapStateToProps(state: any): IConnectedProps {
 export default
   connect(mapStateToProps)(
     withTranslation(['changelog-dashlet', 'common'])(
-      ChangelogDashlet as any)) as React.ComponentClass<{}>;
+      ChangelogDashlet as any)) as any;
