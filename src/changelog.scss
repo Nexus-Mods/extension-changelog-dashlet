@@ -3,6 +3,6 @@
   flex-direction: column;
   .changelog-text {
     overflow: auto;
-    white-space: pre;
+    white-space: pre-wrap;
   }
 }
