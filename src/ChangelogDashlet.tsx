@@ -27,13 +27,13 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
     });
   }
 
-  public componentWillMount() {
+  public UNSAFE_componentWillMount() {
     this.nextState.current = Math.max(
       this.props.changelogs.findIndex(changelog => semver.gte(changelog.version, this.mAppVersion)),
       0);
   }
 
-  public componentWillReceiveProps(nextProps: IProps) {
+  public UNSAFE_componentWillReceiveProps(nextProps: IProps) {
     if (this.props.changelogs !== nextProps.changelogs) {
       this.nextState.current = Math.max(
         nextProps.changelogs.findIndex(changelog =>
