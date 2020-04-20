@@ -10,6 +10,7 @@
     "outDir": "./out",
     "jsx": "react",
     "sourceMap": false,
+    "skipLibCheck": true,
     "esModuleInterop": true
   },
     "exclude": [
