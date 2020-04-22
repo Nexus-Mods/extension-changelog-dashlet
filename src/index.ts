@@ -2,13 +2,16 @@ import { setChangelogs } from './actions';
 import ChangelogDashlet from './ChangelogDashlet';
 import sessionReducer from './reducers';
 
-import * as Promise from 'bluebird';
+import Promise from 'bluebird';
 import * as _ from 'lodash';
 import * as path from 'path';
 import * as Redux from 'redux';
 import { log, types, util } from 'vortex-api';
 
-function updateReleases(store: Redux.Store<any>): Promise<void> {
+function updateReleases(store: Redux.Store<types.IState>): Promise<void> {
+  if (!(store.getState().session.base as any).networkConnected) {
+    return Promise.resolve();
+  }
   return util.github.releases()
     .then(releases => {
       const state: types.IState = store.getState();
