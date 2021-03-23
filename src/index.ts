@@ -34,14 +34,14 @@ function updateReleases(store: Redux.Store<types.IState>): Promise<void> {
 }
 
 function main(context: types.IExtensionContext) {
-  context.registerDashlet('Changelog', 1, 3, 200, ChangelogDashlet,
-    (state: types.IState) => true,
-  () => ({}), { closable: true });
-
   // We store changelogs persistently, so even on a rare edge case
   //  where the user has exceeded his GitHub rate limit (shouldn't be possible)
   //  we still have data to display.
   context.registerReducer(['persistent', 'changelogs'], sessionReducer);
+
+  context.registerDashlet('Changelog', 1, 3, 200, ChangelogDashlet,
+    (state: types.IState) => true,
+  () => ({}), { closable: true });
 
   context.once(() => {
     context.api.setStylesheet('changelog',
