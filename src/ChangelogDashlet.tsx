@@ -1,10 +1,9 @@
-import { remote } from 'electron';
 import * as React from 'react';
 import { Pager } from 'react-bootstrap';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as semver from 'semver';
-import { ComponentEx, Dashlet } from 'vortex-api';
+import { ComponentEx, Dashlet, util } from 'vortex-api';
 
 interface IConnectedProps {
   changelogs: Array<{ version: string, text: string, prerelease: boolean }>;
@@ -21,7 +20,7 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
   constructor(props: IProps) {
     super(props);
 
-    this.mAppVersion = remote.app.getVersion();
+    this.mAppVersion = util['getApplication']().version;
     this.initState({
       current: 0,
     });
