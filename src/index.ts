@@ -35,7 +35,7 @@ function updateReleases(store: Redux.Store<types.IState>): Promise<void> {
 }
 
 function updateModal(api: types.IExtensionApi, oldVersion: string): Promise<void> {
-  if (semver.lt(oldVersion, '1.5.0')) {
+  if (semver.lt(oldVersion, '0.0.2')) {
     return api.showDialog('info', 'Vortex 1.5 update', {
       md: 'In Vortex 1.5 we are introducing the new Collections feature.\n\n'
         + 'For those unfamiliar with the Collections feature, '

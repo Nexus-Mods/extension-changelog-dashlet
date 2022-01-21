@@ -1,6 +1,6 @@
 {
   "name": "changelog-dashlet",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Shows the changelog of the current vortex version on the dashlet",
   "main": "./out/index.js",
   "repository": "",
