@@ -81,11 +81,15 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
   }
 
   private prev = () => {
+    this.context.api.events.emit(
+      'analytics-track-click-event', 'Dashboard', 'Previous Changelog');
     this.nextState.current = Math.max(0, this.state.current - 1);
   }
 
   private next = () => {
     const { changelogs } = this.props;
+    this.context.api.events.emit(
+      'analytics-track-click-event', 'Dashboard', 'Next Changelog');
     this.nextState.current = Math.min(changelogs.length - 1, this.state.current + 1);
   }
 }
