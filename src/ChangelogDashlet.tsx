@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as semver from 'semver';
 import { ComponentEx, Dashlet, util } from 'vortex-api';
+import ReactMarkdown from 'react-markdown';
 
 interface IConnectedProps {
   changelogs: Array<{ version: string, text: string, prerelease: boolean }>;
@@ -73,9 +74,17 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
         </Pager>
       ),
       (
+
+
+        <ReactMarkdown className='changelog-text'>
+          {changelog.text}
+        </ReactMarkdown>
+
+        /*
         <div className='changelog-text' key={1}>
           {changelog.text}
         </div>
+        */
       ),
     ];
   }

@@ -1,8 +1,19 @@
 .dashlet-changelog {
   display: flex;
   flex-direction: column;
+
   .changelog-text {
+
     overflow: auto;
-    white-space: pre-wrap;
+    white-space: inherit;
+
+    h3 {
+      font-size: 1.5em;
+    }
+
+    li {
+      background-color: transparent;
+      margin-bottom: 10px;
+    }
   }
 }
