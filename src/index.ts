@@ -8,29 +8,51 @@ import * as path from 'path';
 import * as Redux from 'redux';
 import * as semver from 'semver';
 import { log, types, util } from 'vortex-api';
+import { Changelog } from './types';
 
 function updateReleases(store: Redux.Store<types.IState>): Promise<void> {
+
+  const state: types.IState = store.getState();
+  const persistentLogs:Array<Changelog> = util.getSafe(state, ['persistent', 'changelogs', 'changelogs'], []);
+
+  // if changelogs are found in the state, we force sort and then update state, just in case this is the first time
+  if(persistentLogs.length !== 0) {      
+
+    const copiedChangelogs = Array.from(persistentLogs);
+
+    // sort
+    console.log('sorting persistent changelogs');
+    const sortedChangelogs = copiedChangelogs.sort((a, b) => semver.compare(b.version, a.version));
+
+    // update state
+    store.dispatch(setChangelogs(sortedChangelogs));
+  }   
+
   if (!(store.getState().session.base as any).networkConnected) {
     return Promise.resolve();
   }
   return util.github.releases()
     .then(releases => {
-      const state: types.IState = store.getState();
-      const persistentLogs =
-        util.getSafe(state, ['persistent', 'changelogs', 'changelogs'], []);
+
+      // if we have an update from github, then process it and update state
 
       const len = releases.length;
+      
+      //if ((persistentLogs.length !== len)  || (persistentLogs[len - 1].version !== releases[len - 1].name)) {
 
-      if ((persistentLogs.length !== len)
-        || (persistentLogs[len - 1].version !== releases[len - 1].name)) {
         const changeLogs = releases.map(rel => ({
           version: rel.name,
           text: rel.body,
           prerelease: rel.prerelease,
         }));
 
-        store.dispatch(setChangelogs(changeLogs));
-      }
+        const copiedChangelogsArray = Array.from(changeLogs);
+                
+        console.log('sorting new changelogs');
+        const sortedChangelogs = copiedChangelogsArray.sort((a, b) => semver.compare(b.version, a.version));
+        store.dispatch(setChangelogs(sortedChangelogs));
+      //}
+      
     });
 }
 

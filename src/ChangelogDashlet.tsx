@@ -5,9 +5,11 @@ import { connect } from 'react-redux';
 import * as semver from 'semver';
 import { ComponentEx, Dashlet, util } from 'vortex-api';
 import ReactMarkdown from 'react-markdown';
+import { Changelog } from './types';
 
 interface IConnectedProps {
-  changelogs: Array<{ version: string, text: string, prerelease: boolean }>;
+  changelogs: Array<Changelog>;
+  channel: string;
 }
 
 type IProps = IConnectedProps;
@@ -17,21 +19,26 @@ interface IIssueListState {
 }
 
 class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
+
   private mAppVersion: string;
+
   constructor(props: IProps) {
     super(props);
 
     this.mAppVersion = util['getApplication']().version;
+
     this.initState({
       current: 0,
     });
   }
 
   public UNSAFE_componentWillMount() {
+
     this.nextState.current = Math.max(
       this.props.changelogs.findIndex(changelog => semver.gte(changelog.version, this.mAppVersion)),
-      0);
-  }
+    0);
+
+    }
 
   public UNSAFE_componentWillReceiveProps(nextProps: IProps) {
     if (this.props.changelogs !== nextProps.changelogs) {
@@ -43,50 +50,42 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
   }
 
   public render(): JSX.Element {
-    const { t, changelogs } = this.props;
+    const { t, changelogs, channel } = this.props;
     const { current } = this.state;
     return (
-      <Dashlet className='dashlet-changelog' title={t('Changelog')}>
-        {(current < changelogs.length) ? this.renderContent() : null}
+      <Dashlet className='dashlet-changelog' title={t('What\'s New')}>
+        {this.renderContent()}
       </Dashlet>
     );
   }
 
   private renderContent() {
-    const { t, changelogs } = this.props;
+    const { t, changelogs, channel } = this.props;
     const { current } = this.state;
 
-    const changelog = changelogs[current];
-    if (changelog === undefined) {
-      return null;
-    }
+    // filter out prereleases if on stable channel
+    const filteredChangelogs = changelogs.filter((changelog) => {  
+      if(channel === 'stable') 
+        return changelog.prerelease === !(channel === 'stable');
+      else
+        return true;  // return everything if not stable
+    });
 
-    return [
-      (
-        <Pager key={0}>
-          <Pager.Item previous disabled={current === 0} onClick={this.prev}>
-            {t('Previous')}
-          </Pager.Item>
-          {changelog.version}{changelog.prerelease ? ` (${t('Pre-release')})` : ''}
-          <Pager.Item next disabled={current === changelogs.length - 1} onClick={this.next}>
-            {t('Next')}
-          </Pager.Item>
-        </Pager>
-      ),
-      (
-
-
-        <ReactMarkdown className='changelog-text'>
-          {changelog.text}
-        </ReactMarkdown>
-
-        /*
-        <div className='changelog-text' key={1}>
-          {changelog.text}
-        </div>
-        */
-      ),
-    ];
+    return (
+      <div className='changelog-container'>
+      { 
+        // only show latest 10 changelogs
+        filteredChangelogs.slice(0,10).map((changelog) => (
+          <div className='changelog-entry' key={changelog.version}>
+            <h4 className='changelog-title'>{changelog.version}{changelog.prerelease ? ` (${t('Beta')})` : ''}</h4>
+            <ReactMarkdown className='changelog-text'>
+              {changelog.text}
+            </ReactMarkdown>
+          </div>
+        ))
+      }
+    </div>
+    );
   }
 
   private prev = () => {
@@ -106,6 +105,7 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
 function mapStateToProps(state: any): IConnectedProps {
   return {
     changelogs: state.persistent.changelogs.changelogs,
+    channel: state.settings.update.channel
   };
 }
 
