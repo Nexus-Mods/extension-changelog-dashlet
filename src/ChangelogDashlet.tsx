@@ -77,7 +77,7 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
         // only show latest 10 changelogs
         filteredChangelogs.slice(0,10).map((changelog) => (
           <div className='changelog-entry' key={changelog.version}>
-            <h4 className='changelog-title'>{changelog.version}{changelog.prerelease ? ` (${t('Beta')})` : ''}</h4>
+            <h4 className='changelog-title'>Version {changelog.version}{changelog.prerelease ? ` (${t('Beta')})` : ''}</h4>
             <ReactMarkdown className='changelog-text'>
               {changelog.text}
             </ReactMarkdown>
