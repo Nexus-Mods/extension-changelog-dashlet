@@ -28,7 +28,7 @@
     "copyfiles": "^2.1.1",
     "react-redux": "^5.0.7",
     "redux-act": "^1.7.4",
-    "semver": "^5.5.0",
+    "semver": "^5.7.2",
     "vortex-ext-dependencies": "Nexus-Mods/vortex-ext-dependencies"
   }
 }
