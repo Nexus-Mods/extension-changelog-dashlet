@@ -65,25 +65,38 @@ class ChangelogDashlet extends ComponentEx<IProps, IIssueListState> {
 
     // filter out prereleases if on stable channel
     const filteredChangelogs = changelogs.filter((changelog) => {  
+
+      //if(channel === 'stable') 
+      //  return changelog.prerelease === !(channel === 'stable');
+
+      // we only want to show changelogs that are same or older than the current version
+      const comparisonResult = semver.compare(changelog.version, this.mAppVersion); 
+      
+      return comparisonResult === 0 || comparisonResult === -1;
+
+      /*
       if(channel === 'stable') 
         return changelog.prerelease === !(channel === 'stable');
       else
-        return true;  // return everything if not stable
-    });
+        return true;  // return everything if not stable*/
+    });           
 
     return (
       <div className='changelog-container'>
-      { 
-        // only show latest 10 changelogs
-        filteredChangelogs.slice(0,10).map((changelog) => (
-          <div className='changelog-entry' key={changelog.version}>
-            <h4 className='changelog-title'>Version {changelog.version}{changelog.prerelease ? ` (${t('Beta')})` : ''}</h4>
-            <ReactMarkdown className='changelog-text'>
-              {changelog.text}
-            </ReactMarkdown>
-          </div>
-        ))
-      }
+      {
+        filteredChangelogs.length === 0 ? (        
+        <div className='changelog-entry'>No changelogs found</div>
+          ) : (
+            filteredChangelogs.slice(0,10).map((changelog) => (
+                  <div className='changelog-entry' key={changelog.version}>
+                    <h4 className='changelog-title'>Version {changelog.version}</h4>
+                    <ReactMarkdown className='changelog-text'>
+                      {changelog.text}
+                    </ReactMarkdown>
+                  </div>
+                ))
+            )          
+            }  
     </div>
     );
   }
