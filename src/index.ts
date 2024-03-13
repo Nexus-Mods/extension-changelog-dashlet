@@ -21,7 +21,6 @@ function updateReleases(store: Redux.Store<types.IState>): Promise<void> {
     const copiedChangelogs = Array.from(persistentLogs);
 
     // sort
-    console.log('sorting persistent changelogs');
     const sortedChangelogs = copiedChangelogs.sort((a, b) => semver.compare(b.version, a.version));
 
     // update state
@@ -48,7 +47,6 @@ function updateReleases(store: Redux.Store<types.IState>): Promise<void> {
 
         const copiedChangelogsArray = Array.from(changeLogs);
                 
-        console.log('sorting new changelogs');
         const sortedChangelogs = copiedChangelogsArray.sort((a, b) => semver.compare(b.version, a.version));
         store.dispatch(setChangelogs(sortedChangelogs));
       //}
